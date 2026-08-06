@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+<title>ELO PATH · Jornada da Rebeca</title>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Arimo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#025036;
+    --sage:#7DA293;
+    --off:#FFFCF7;
+    --lilac:#CAB5D7;
+    --purple:#9C75BD;
+    --ink:#0D0A11;
+    --lilac-soft: #EFE7F4;
+    --purple-soft: #F1E9F7;
+    --sage-soft: #E9F1EC;
+    --card-radius: 22px;
+    --shadow-soft: 0 10px 30px rgba(13,10,17,0.07);
+    --shadow-lift: 0 16px 40px rgba(13,10,17,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:#F2ECE4;
+    font-family:'Arimo', sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4,.display{
+    font-family:'Poppins','Arimo',sans-serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  p{margin:0;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;}
+  input,textarea{font-family:inherit;}
+  ::selection{background:var(--lilac);color:var(--ink);}
+
+  /* ---------- background stage (behind phone frame) ---------- */
+  .stage{
+    min-height:100vh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:0;
+    position:relative;
+    overflow:hidden;
+  }
+  .stage::before, .stage::after{
+    content:'';
+    position:fixed;
+    border-radius:50%;
+    filter:blur(0px);
+    opacity:0.5;
+    z-index:0;
+  }
+  .stage::before{
+    width:420px;height:420px;
+    background:var(--lilac);
+    top:-160px; left:-140px;
+    opacity:0.35;
+  }
+  .stage::after{
+    width:360px;height:360px;
+    background:var(--sage);
+    bottom:-140px; right:-120px;
+    opacity:0.28;
+  }
+  @media (min-width:620px){
+    body{padding:32px 16px;}
+    .stage{align-items:center;}
+  }
+
+  /* ---------- phone frame ---------- */
+  .frame{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:460px;
+    min-height:100vh;
+    background:var(--off);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  @media (min-width:620px){
+    .frame{
+      min-height:860px;
+      max-height:900px;
+      border-radius:36px;
+      box-shadow:var(--shadow-lift);
+      border:1px solid rgba(13,10,17,0.06);
+    }
+  }
+
+  .screen{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    min-height:100%;
+    animation:enter .5s cubic-bezier(.22,.68,0,1);
+  }
+  @keyframes enter{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .fade-in{animation:fadeIn .45s ease both;}
+  @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+
+  /* scroll area within frame */
+  .scroll{
+    flex:1;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    padding:24px 22px 100px;
+  }
+  .scroll::-webkit-scrollbar{width:0;}
+
+  /* ---------- scribble accent ---------- */
+  .scribble{display:block; margin-top:4px;}
+
+  /* ---------- welcome screen ---------- */
+  .welcome{
+    background:linear-gradient(160deg, var(--green) 0%, #033f2b 60%, #032e20 100%);
+    color:var(--off);
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px 32px;
+    position:relative;
+  }
+  .welcome .mark{
+    font-family:'Poppins',sans-serif;
+    font-size:13px;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    color:var(--lilac);
+    margin-bottom:26px;
+  }
+  .welcome h1{
+    font-size:38px;
+    line-height:1.15;
+    color:var(--off);
+  }
+  .welcome .sub{
+    margin-top:18px;
+    color:rgba(255,252,247,0.72);
+    font-size:15.5px;
+    line-height:1.6;
+    max-width:320px;
+  }
+  .welcome .student{
+    margin-top:34px;
+    font-family:'Poppins',sans-serif;
+    font-size:22px;
+    color:var(--lilac);
+  }
+  .welcome .cta{
+    margin-top:44px;
+    background:var(--off);
+    color:var(--green);
+    padding:16px 40px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:15.5px;
+    box-shadow:0 10px 24px rgba(0,0,0,0.25);
+    transition:transform .2s ease;
+  }
+  .welcome .cta:active{transform:scale(0.96);}
+  .welcome .doodle{position:absolute; opacity:0.5;}
+
+  /* ---------- teacher message ---------- */
+  .teacher-wrap{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:36px 26px;
+    background:
+      radial-gradient(circle at 15% 10%, var(--purple-soft) 0%, transparent 45%),
+      radial-gradient(circle at 85% 90%, var(--sage-soft) 0%, transparent 45%),
+      var(--off);
+  }
+  .note-card{
+    background:#fff;
+    border-radius:26px;
+    padding:30px 26px;
+    box-shadow:var(--shadow-soft);
+    border:1px solid rgba(13,10,17,0.05);
+  }
+  .note-eyebrow{
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--purple);
+    font-weight:600;
+  }
+  .note-card h2{
+    font-size:23px;
+    margin-top:10px;
+    color:var(--green);
+  }
+  .note-body{
+    margin-top:18px;
+    font-size:15.5px;
+    line-height:1.75;
+    color:#2b2530;
+    white-space:pre-line;
+  }
+  .note-sign{
+    margin-top:22px;
+    font-family:'Poppins',sans-serif;
+    font-size:15px;
+    color:var(--green);
+  }
+  .teacher-wrap .cta{
+    margin-top:28px;
+    align-self:center;
+    background:var(--green);
+    color:var(--off);
+    padding:15px 34px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:15px;
+    box-shadow:0 10px 22px rgba(2,80,54,0.25);
+  }
+
+  /* ---------- top bar inside main app ---------- */
+  .topbar{
+    padding:22px 22px 4px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .topbar .greeting-eyebrow{
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--sage);
+    font-weight:700;
+  }
+  .topbar h1{
+    font-size:24px;
+    color:var(--ink);
+    margin-top:4px;
+  }
+  .avatar{
+    width:44px;height:44px;border-radius:50%;
+    background:var(--lilac);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Poppins',sans-serif;font-weight:700;color:var(--green);
+    font-size:17px;
+    flex-shrink:0;
+  }
+
+  /* ---------- cards ---------- */
+  .card{
+    background:#fff;
+    border-radius:var(--card-radius);
+    padding:20px;
+    box-shadow:var(--shadow-soft);
+    border:1px solid rgba(13,10,17,0.045);
+  }
+  .section-title{
+    font-size:13px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--purple);
+    font-weight:700;
+    margin:26px 2px 12px;
+  }
+  .section-title:first-child{margin-top:6px;}
+
+  /* continue card */
+  .continue-card{
+    background:linear-gradient(135deg, var(--purple) 0%, #8a63aa 100%);
+    color:var(--off);
+    border-radius:var(--card-radius);
+    padding:20px;
+    box-shadow:0 12px 26px rgba(156,117,189,0.35);
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .continue-card .icon-badge{
+    width:48px;height:48px;border-radius:16px;
+    background:rgba(255,255,255,0.18);
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;flex-shrink:0;
+  }
+  .continue-card .txt{flex:1;}
+  .continue-card .txt .eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:0.1em;opacity:0.85;}
+  .continue-card .txt .title{font-family:'Poppins',sans-serif;font-weight:700;font-size:16px;margin-top:2px;}
+  .continue-card .arrow{font-size:20px;opacity:0.9;}
+
+  /* stat row */
+  .stat-row{
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .ring{
+    width:64px;height:64px;
+    border-radius:50%;
+    flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    background:conic-gradient(var(--green) calc(var(--pct)*1%), var(--lilac-soft) 0);
+  }
+  .ring-inner{
+    width:50px;height:50px;border-radius:50%;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:var(--green);
+    text-align:center;line-height:1.1;
+  }
+  .stat-label{font-size:14.5px;color:#5a5560;line-height:1.5;}
+  .stat-label b{color:var(--ink);}
+
+  /* indicators grid */
+  .ind-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:16px;
+  }
+  .ind-card{
+    background:var(--purple-soft);
+    border-radius:16px;
+    padding:14px;
+  }
+  .ind-card .ind-label{font-size:12.5px;font-weight:600;color:#4a3f52;}
+  .ind-dots{display:flex;gap:5px;margin-top:9px;}
+  .ind-dot{width:9px;height:9px;border-radius:50%;background:rgba(13,10,17,0.12);}
+  .ind-dot.filled{background:var(--purple);}
+  .ind-level{margin-top:8px;font-size:12.5px;color:var(--green);font-weight:700;}
+
+  /* activity cards in journey */
+  .week-note{
+    background:var(--sage-soft);
+    border-radius:16px;
+    padding:12px 14px;
+    font-size:13.5px;
+    color:#2f4a3d;
+    margin-bottom:14px;
+    display:flex;gap:8px;align-items:flex-start;
+  }
+  .act-card{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:#fff;
+    border-radius:18px;
+    padding:15px;
+    margin-bottom:12px;
+    box-shadow:var(--shadow-soft);
+    border:1px solid rgba(13,10,17,0.045);
+    transition:transform .15s ease;
+  }
+  .act-card:active{transform:scale(0.98);}
+  .act-icon{
+    width:46px;height:46px;border-radius:14px;
+    background:var(--lilac-soft);
+    display:flex;align-items:center;justify-content:center;
+    font-size:21px;flex-shrink:0;
+  }
+  .act-icon.done{background:var(--green);}
+  .act-body{flex:1;min-width:0;}
+  .act-title{font-family:'Poppins',sans-serif;font-weight:600;font-size:15px;color:var(--ink);}
+  .act-sub{font-size:12.5px;color:#8a8390;margin-top:2px;}
+  .badge{
+    font-size:11px;
+    font-weight:700;
+    padding:5px 10px;
+    border-radius:999px;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .badge.not_started{background:#F0EDEE;color:#9a939e;}
+  .badge.in_progress{background:var(--lilac-soft);color:var(--purple);}
+  .badge.completed{background:var(--sage-soft);color:var(--green);}
+
+  /* progress tab */
+  .lvl-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 4px;
+    border-bottom:1px solid rgba(13,10,17,0.06);
+  }
+  .lvl-row:last-child{border-bottom:none;}
+  .lvl-name{font-size:14.5px;font-weight:600;color:var(--ink);}
+  .lvl-desc{font-size:12px;color:#8a8390;margin-top:2px;}
+
+  /* achievements */
+  .ach-card{
+    display:flex;align-items:center;gap:14px;
+    background:#fff;border-radius:18px;padding:16px;margin-bottom:12px;
+    box-shadow:var(--shadow-soft);border:1px solid rgba(13,10,17,0.045);
+  }
+  .ach-card.locked{opacity:0.5;}
+  .ach-icon{
+    width:48px;height:48px;border-radius:50%;
+    background:var(--lilac);
+    display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;
+  }
+  .ach-card.locked .ach-icon{background:#EDEAE4;}
+  .ach-title{font-family:'Poppins',sans-serif;font-weight:600;font-size:14.5px;}
+  .ach-desc{font-size:12.5px;color:#8a8390;margin-top:2px;}
+
+  /* bottom nav */
+  .bottom-nav{
+    display:flex;
+    border-top:1px solid rgba(13,10,17,0.07);
+    background:rgba(255,252,247,0.96);
+    backdrop-filter:blur(6px);
+    padding:10px 6px calc(10px + env(safe-area-inset-bottom));
+  }
+  .nav-btn{
+    flex:1;
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+    font-size:11px;font-weight:600;color:#a39cac;
+    padding:6px 2px;
+    border-radius:12px;
+  }
+  .nav-btn .ic{font-size:19px;}
+  .nav-btn.active{color:var(--green);}
+
+  /* ---------- activity screen ---------- */
+  .act-header{
+    padding:18px 20px 12px;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:10px;
+  }
+  .icon-btn{
+    width:38px;height:38px;border-radius:12px;
+    background:#fff;box-shadow:var(--shadow-soft);
+    display:flex;align-items:center;justify-content:center;font-size:16px;
+    flex-shrink:0;
+    color:var(--green);
+  }
+  .act-header-title{
+    text-align:center;flex:1;min-width:0;
+  }
+  .act-header-title .eyebrow{font-size:11px;color:var(--purple);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;}
+  .act-header-title .title{font-family:'Poppins',sans-serif;font-weight:600;font-size:14.5px;margin-top:1px;}
+
+  .stage-dots{
+    display:flex;justify-content:center;gap:7px;
+    padding:2px 20px 16px;
+  }
+  .stage-dot{
+    width:26px;height:5px;border-radius:4px;
+    background:#EDE7E1;
+  }
+  .stage-dot.on{background:var(--purple);}
+  .stage-dot.done{background:var(--sage);}
+
+  .stage-body{
+    padding:4px 22px 32px;
+  }
+  .stage-kicker{font-size:12px;color:var(--purple);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;}
+  .stage-h{font-family:'Poppins',sans-serif;font-size:21px;margin-top:8px;color:var(--ink);line-height:1.3;}
+  .stage-help{font-size:14px;color:#7a7480;margin-top:8px;line-height:1.6;}
+
+  .item-card{
+    background:#fff;border-radius:18px;padding:16px;margin-top:16px;
+    box-shadow:var(--shadow-soft);border:1px solid rgba(13,10,17,0.045);
+  }
+  .item-head{display:flex;align-items:center;gap:12px;}
+  .item-emoji{font-size:26px;}
+  .item-label{font-family:'Poppins',sans-serif;font-weight:600;font-size:15px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px;}
+  .chip{
+    padding:9px 13px;border-radius:999px;
+    background:var(--lilac-soft);color:#4a3f52;
+    font-size:13px;font-weight:600;
+    border:1.5px solid transparent;
+  }
+  .chip.selected{background:var(--purple);color:#fff;}
+
+  .fill-sentence{
+    background:#fff;border-radius:18px;padding:16px;margin-top:14px;
+    box-shadow:var(--shadow-soft);border:1px solid rgba(13,10,17,0.045);
+  }
+  .fill-sentence .item-emoji{font-size:20px;margin-right:6px;}
+  .fill-line{font-size:15px;line-height:1.7;color:var(--ink);}
+  .blank-input{
+    border:none;border-bottom:2px solid var(--purple);
+    background:var(--purple-soft);
+    padding:6px 10px;border-radius:8px 8px 0 0;
+    font-size:14.5px;font-weight:600;color:var(--green);
+    width:150px;max-width:60%;
+  }
+  .blank-input:focus{outline:none;border-bottom-color:var(--green);}
+  .hint-toggle{
+    margin-top:10px;font-size:12.5px;color:var(--purple);font-weight:600;
+  }
+  .hint-box{
+    margin-top:8px;font-size:12.5px;color:#6b6470;background:var(--sage-soft);
+    padding:9px 11px;border-radius:10px;line-height:1.6;
+  }
+
+  textarea.free-input, input.free-input{
+    width:100%;background:#fff;border:1.5px solid rgba(13,10,17,0.1);
+    border-radius:14px;padding:14px;font-size:14.5px;line-height:1.6;
+    margin-top:10px;resize:vertical;color:var(--ink);
+  }
+  textarea.free-input:focus, input.free-input:focus{outline:none;border-color:var(--purple);}
+  .field-label{font-size:13.5px;font-weight:600;color:var(--ink);margin-top:20px;display:block;}
+  .field-label:first-of-type{margin-top:18px;}
+
+  .choice-block{margin-top:20px;}
+  .choice-block .q{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:10px;}
+
+  .feedback-card{
+    background:linear-gradient(160deg, var(--green), #033f2b);
+    color:var(--off);
+    border-radius:20px;padding:20px;margin-top:16px;
+  }
+  .feedback-card .quote{
+    background:rgba(255,255,255,0.1);
+    border-left:3px solid var(--lilac);
+    padding:12px 14px;border-radius:0 12px 12px 0;
+    font-style:italic;font-size:14px;margin:12px 0;line-height:1.6;
+  }
+  .feedback-card p{font-size:14.5px;line-height:1.7;}
+  .feedback-card p + p{margin-top:10px;}
+
+  .stage-footer{
+    padding:14px 20px calc(16px + env(safe-area-inset-bottom));
+    display:flex;gap:10px;
+    border-top:1px solid rgba(13,10,17,0.06);
+    background:var(--off);
+  }
+  .btn{
+    padding:14px 18px;border-radius:14px;
+    font-weight:600;font-size:14.5px;
+    text-align:center;
+  }
+  .btn-primary{
+    flex:1;background:var(--green);color:var(--off);
+    box-shadow:0 8px 18px rgba(2,80,54,0.22);
+  }
+  .btn-primary:disabled, .btn-primary.disabled{
+    background:#D9D3CE;color:#a29c96;box-shadow:none;
+  }
+  .btn-ghost{
+    background:var(--lilac-soft);color:var(--purple);
+  }
+  .btn-done{
+    flex:1;
+    background:#025036;
+    color:#FFFCF7;
+    padding:18px 20px;
+    border-radius:999px;
+    font-size:16px;
+    font-weight:700;
+    box-shadow:0 12px 26px rgba(2,80,54,0.32);
+  }
+  .btn-done:disabled, .btn-done.disabled{
+    background:#D9D3CE;color:#a29c96;box-shadow:none;
+  }
+
+  /* toast */
+  .toast{
+    position:absolute;
+    left:50%;top:18px;
+    transform:translate(-50%,-140%);
+    background:var(--ink);color:#fff;
+    padding:12px 18px;border-radius:14px;
+    font-size:13.5px;font-weight:600;
+    display:flex;align-items:center;gap:9px;
+    box-shadow:0 10px 24px rgba(0,0,0,0.25);
+    z-index:50;
+    transition:transform .4s cubic-bezier(.22,.68,0,1);
+    max-width:88%;
+  }
+  .toast.show{transform:translate(-50%,0);}
+  .toast .em{font-size:18px;}
+
+  .empty-note{
+    margin-top:14px;font-size:13px;color:#9a939e;text-align:center;padding:18px;
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="frame" id="frame">
+    <div id="app"></div>
+  </div>
+</div>
+
+<script>
+/* =======================================================
+   ELO PATH — data
+======================================================= */
+const STORAGE_KEY = 'elopath_rebeca_v2';
+const STUDENT_NAME = 'Rebeca';
+
+const LEVELS = ['Começando','Evoluindo','Indo bem','Pronta para usar'];
+
+const INDICATORS = [
+  {key:'vocabulary', label:'Vocabulário', desc:'Reconhecer e usar novas palavras e expressões.'},
+  {key:'sentenceBuilding', label:'Construção de frases', desc:'Organizar palavras em frases completas e corretas.'},
+  {key:'reading', label:'Leitura e compreensão', desc:'Compreender enunciados e textos curtos.'},
+  {key:'communication', label:'Comunicação', desc:'Expressar ideias reais e pessoais em inglês.'}
+];
+
+const ACHIEVEMENTS_META = [
+  {id:'first_sentence', title:'Primeira frase independente', desc:'Escreveu uma frase pessoal em inglês sem opções para escolher.', icon:'✍️'},
+  {id:'great_reader', title:'Ótima leitora', desc:'Compreendeu e completou frases guiadas com confiança.', icon:'📖'},
+  {id:'favorite_explorer', title:'Exploradora das coisas favoritas', desc:'Concluiu a Atividade 1 — Things I Like.', icon:'☕'},
+  {id:'conversation_starter', title:'Iniciadora de conversas', desc:'Concluiu uma atividade focada em conversas reais.', icon:'💬'},
+  {id:'journey_complete', title:'Jornada concluída', desc:'Concluiu as seis atividades da jornada.', icon:'🌟'},
+];
+
+const EXPRESSIONS = ['I love it.', 'I really like it.', 'I like it.', "It's OK.", "I don't like it."];
+const REFLECTION_OPTIONS = ['Reconhecer os itens', 'Completar as frases', 'Escrever minhas próprias frases'];
+
+const GUIDED_HINT_EXPRESSIONS = "Tente uma destas: I love it. / I really like it. / I like it. / It's OK. / I don't like it.";
+
+const TYPE_DEFAULT_BUMPS = {
+  recognition: ['vocabulary'],
+  fillBlank: ['reading','sentenceBuilding'],
+  independent: ['communication'],
+  secondAttempt: ['sentenceBuilding'],
+  reflection: [],
+  feedback: [],
+  celebrate: [],
+};
+const TYPE_DEFAULT_ACHIEVEMENTS = {
+  independent: ['first_sentence'],
+  fillBlank: ['great_reader'],
+};
+
+/* =======================================================
+   ACTIVITIES — full six-activity journey
+======================================================= */
+const ACTIVITIES_META = [
+  /* ---------------- Activity 1 — Things I Like (unchanged) ---------------- */
+  {
+    id:'a1', week:1, title:'Things I Like',
+    subtitle:'Fale sobre suas coisas favoritas.',
+    desc:'Fale sobre suas coisas favoritas.',
+    icon:'☕',
+    stages:[
+      {
+        key:'recognition', type:'recognition',
+        kicker:'Reconhecimento', title:'O que você acha destes itens?',
+        helpText:'Observe cada item abaixo. Toque na frase que mostra o que você realmente pensa sobre ele.',
+        items:[
+          {key:'music', label:'Music', emoji:'🎵', options:EXPRESSIONS},
+          {key:'rainyDays', label:'Rainy days', emoji:'🌧️', options:EXPRESSIONS},
+          {key:'wakingEarly', label:'Waking up early', emoji:'⏰', options:EXPRESSIONS},
+        ],
+      },
+      {
+        key:'guidedRecall', type:'fillBlank',
+        kicker:'Prática guiada', title:'Complete as frases',
+        helpText:"Complete cada lacuna com uma expressão de preferência. Não existe uma única resposta certa, escreva o que for verdadeiro e correto para você.",
+        items:[
+          {key:'music', emoji:'🎵', pre:'Music?', post:', I listen to it every day.', hint:GUIDED_HINT_EXPRESSIONS},
+          {key:'rainyDays', emoji:'🌧️', pre:'Rainy days?', post:', I like staying home with a book.', hint:GUIDED_HINT_EXPRESSIONS},
+          {key:'wakingEarly', emoji:'⏰', pre:'Waking up early?', post:', but I do it for work.', hint:GUIDED_HINT_EXPRESSIONS},
+        ],
+      },
+      {
+        key:'independent', type:'independent',
+        kicker:'Produção independente', title:'Agora, com suas próprias palavras',
+        helpText:'Agora sem opções. Escreva suas próprias frases sobre as suas preferências reais.',
+        fields:[
+          {key:'loves', label:'Uma coisa que você ama:', placeholder:'I love ...'},
+          {key:'dislikes', label:'Uma coisa de que você não gosta:', placeholder:"I don't like ..."},
+        ],
+      },
+      {key:'reflection', type:'reflection', kicker:'Reflexão', title:'Como foi para você?'},
+      {
+        key:'feedback', type:'feedback',
+        kicker:'Feedback', title:'Veja o que eu percebi',
+        independentKey:'independent', reflectionKey:'reflection',
+      },
+      {
+        key:'secondAttempt', type:'secondAttempt',
+        kicker:'Segunda tentativa', title:'Mais uma, ainda melhor',
+        helpText:'Agora que você já refletiu sobre a sua primeira tentativa, escreva uma frase melhorada, ou uma frase nova, sobre algo que você gosta ou não gosta.',
+        placeholder:'Escreva sua frase aqui...',
+      },
+    ],
+  },
+
+  /* ---------------- Activity 2 — My Favorite Things ---------------- */
+  {
+    id:'a2', week:1, title:'My Favorite Things',
+    subtitle:'Fale sobre sua comida, cor, animal, estação e hobby favoritos.',
+    desc:'Fale sobre sua comida, cor, animal, estação e hobby favoritos.',
+    icon:'🎵',
+    stages:[
+      {
+        key:'recognition', type:'recognition',
+        kicker:'Reconhecimento', title:'Quais são as suas favoritas?',
+        helpText:'Observe cada categoria abaixo. Toque na palavra que representa a sua preferência real.',
+        items:[
+          {key:'food', label:'Food', emoji:'🍕', options:['pizza','sushi','pasta','chocolate','salad']},
+          {key:'color', label:'Color', emoji:'🎨', options:['blue','red','green','purple','yellow']},
+          {key:'animal', label:'Animal', emoji:'🐶', options:['dog','cat','bird','lion','fish']},
+          {key:'season', label:'Season', emoji:'☀️', options:['summer','winter','spring','fall']},
+          {key:'hobby', label:'Hobby', emoji:'📚', options:['reading','dancing','cooking','soccer']},
+        ],
+      },
+      {
+        key:'guidedPractice', type:'fillBlank',
+        kicker:'Prática guiada', title:'Complete as frases',
+        helpText:'Complete cada frase com a sua resposta real em inglês.',
+        items:[
+          {key:'food', emoji:'🍕', pre:'My favorite food is', post:'.', hint:'Complete com uma palavra em inglês, por exemplo: pizza, sushi, pasta...'},
+          {key:'color', emoji:'🎨', pre:'My favorite color is', post:'.', hint:'Complete com uma cor em inglês, por exemplo: blue, red, green...'},
+          {key:'animal', emoji:'🐶', pre:'My favorite animal is', post:'.', hint:'Complete com um animal em inglês, por exemplo: dog, cat, bird...'},
+        ],
+      },
+      {
+        key:'independent', type:'independent',
+        kicker:'Produção independente', title:'Agora, com suas próprias palavras',
+        helpText:'Agora sem opções. Escreva sobre a sua estação do ano e o seu hobby favoritos.',
+        fields:[
+          {key:'season', label:'Sua estação do ano favorita:', placeholder:'My favorite season is ...'},
+          {key:'hobby', label:'Seu hobby favorito:', placeholder:'My favorite hobby is ...'},
+        ],
+      },
+      {key:'reflection', type:'reflection', kicker:'Reflexão', title:'Como foi para você?'},
+      {
+        key:'feedback', type:'feedback',
+        kicker:'Feedback', title:'Veja o que eu percebi',
+        independentKey:'independent', reflectionKey:'reflection',
+        introText:`Olha só o que você fez, ${STUDENT_NAME}! Você contou sobre a sua estação e o seu hobby favoritos, com suas próprias palavras.`,
+        outroText:'Cada uma dessas frases mostra que você já consegue falar sobre você mesma em inglês, sem depender de opções prontas.',
+      },
+      {
+        key:'secondAttempt', type:'secondAttempt',
+        kicker:'Segunda tentativa', title:'Mais uma, ainda melhor',
+        helpText:'Escreva mais uma frase sobre uma das suas coisas favoritas, pode ser nova ou melhorada.',
+        placeholder:'Escreva sua frase aqui...',
+      },
+    ],
+  },
+
+  /* ---------------- Activity 3 — Meet Camila ---------------- */
+  {
+    id:'a3', week:1, title:'Meet Camila',
+    subtitle:'Leia um texto pessoal curto e responda perguntas.',
+    desc:'Leia um texto pessoal curto e responda perguntas.',
+    icon:'💬',
+    stages:[
+      {
+        key:'recognition', type:'recognition',
+        kicker:'Reconhecimento', title:'O que você entendeu sobre a Camila?',
+        helpText:'Leia o texto sobre a Camila. Depois, toque na resposta correta para cada pergunta.',
+        passage:{
+          title:'Meet Camila',
+          text:"Hi! My name is Camila. My favorite food is pizza. My favorite color is blue. I love music, but I don't like rainy days. My favorite animal is my dog, Max.",
+        },
+        items:[
+          {key:'food', label:"Camila's favorite food", emoji:'🍕', options:['Pizza','Sushi','Salad']},
+          {key:'color', label:"Camila's favorite color", emoji:'🎨', options:['Blue','Red','Green']},
+          {key:'music', label:'Camila and music', emoji:'🎵', options:['She loves it.','She likes it a little.',"She doesn't like it."]},
+        ],
+        bumps:['reading'],
+      },
+      {
+        key:'guidedPractice', type:'fillBlank',
+        kicker:'Prática guiada', title:'Complete com informações do texto',
+        helpText:'Complete as frases com informações do texto sobre a Camila. Releia o texto se precisar.',
+        items:[
+          {key:'animal', emoji:'🐶', pre:"Camila's favorite animal is her", post:', Max.', hint:'A palavra está no texto: é um animal de estimação.'},
+          {key:'rain', emoji:'🌧️', pre:'Camila', post:'like rainy days.', hint:"Dica: complete com don't ou doesn't."},
+          {key:'color', emoji:'🎨', pre:"Camila's favorite color is", post:'.', hint:'A resposta está no texto.'},
+        ],
+      },
+      {
+        key:'independent', type:'independent',
+        kicker:'Produção independente', title:'Agora fale sobre você',
+        helpText:'Agora é a sua vez de contar sobre as suas preferências, como a Camila fez.',
+        fields:[
+          {key:'food', label:'Sua comida favorita:', placeholder:'My favorite food is ...'},
+          {key:'petAnimal', label:'Seu animal favorito:', placeholder:'My favorite animal is ...'},
+        ],
+      },
+      {key:'reflection', type:'reflection', kicker:'Reflexão', title:'Como foi para você?'},
+      {
+        key:'feedback', type:'feedback',
+        kicker:'Feedback', title:'Veja o que eu percebi',
+        independentKey:'independent', reflectionKey:'reflection',
+        introText:`Muito bem, ${STUDENT_NAME}! Você leu um texto em inglês, entendeu as informações e depois escreveu sobre você mesma, do mesmo jeito que a Camila fez.`,
+        outroText:'Ler e depois produzir seu próprio texto é exatamente como a comunicação real funciona. Você já está fazendo isso.',
+      },
+      {
+        key:'secondAttempt', type:'secondAttempt',
+        kicker:'Segunda tentativa', title:'Mais uma, ainda melhor',
+        helpText:'Escreva mais uma frase sobre você, comparando com algo que a Camila disse no texto.',
+        placeholder:'Escreva sua frase aqui...',
+      },
+    ],
+  },
+
+  /* ---------------- Activity 4 — Let's Talk ---------------- */
+  {
+    id:'a4', week:2, title:"Let's Talk",
+    subtitle:'Pratique perguntar, responder e reagir.',
+    desc:'Pratique perguntar, responder e reagir.',
+    icon:'📖',
+    stages:[
+      {
+        key:'recognition', type:'recognition',
+        kicker:'Reconhecimento', title:'Como você reage?',
+        helpText:'Leia cada frase e toque na reação mais natural.',
+        items:[
+          {key:'pizza', label:'"I love pizza!"', emoji:'🍕', options:['Me too.','Really?',"I don't."]},
+          {key:'rain', label:'"I don\'t like rainy days."', emoji:'🌧️', options:['Me too.','Really?','I love it.']},
+          {key:'soccer', label:'"Do you like soccer?"', emoji:'⚽', options:['Yes, I do.',"No, I don't.","It's OK."]},
+        ],
+      },
+      {
+        key:'guidedPractice', type:'fillBlank',
+        kicker:'Prática guiada', title:'Complete a mini conversa',
+        helpText:'Complete cada mini diálogo com uma reação natural em inglês.',
+        items:[
+          {key:'r1', emoji:'🍫', pre:'A: I love chocolate! B:', post:'', hint:"Tente uma reação: Me too. / Really? / I don't."},
+          {key:'r2', emoji:'⚽', pre:'A: Do you like soccer? B:', post:'', hint:"Tente: Yes, I do. / No, I don't. / It's OK."},
+          {key:'r3', emoji:'🎵', pre:'A: My favorite hobby is music. B:', post:'', hint:"Tente uma reação: Me too. / Really? / I don't."},
+        ],
+      },
+      {
+        key:'independent', type:'independent',
+        kicker:'Produção independente', title:'Crie a sua própria conversa',
+        helpText:'Agora é a sua vez de criar a sua própria mini conversa.',
+        fields:[
+          {key:'question', label:'Escreva uma pergunta usando "What\'s your favorite...?" ou "Do you like...?":', placeholder:"What's your favorite ...?"},
+          {key:'answer', label:'Agora escreva uma resposta para a sua pergunta:', placeholder:'My favorite ... is ...'},
+        ],
+      },
+      {key:'reflection', type:'reflection', kicker:'Reflexão', title:'Como foi para você?'},
+      {
+        key:'feedback', type:'feedback',
+        kicker:'Feedback', title:'Veja o que eu percebi',
+        independentKey:'independent', reflectionKey:'reflection',
+        introText:`Olha só, ${STUDENT_NAME}! Você criou a sua própria pergunta e a sua própria resposta em inglês, exatamente como em uma conversa real.`,
+        outroText:'Perguntar e reagir naturalmente é uma das partes mais importantes de falar inglês de verdade, e você já está treinando isso.',
+      },
+      {
+        key:'secondAttempt', type:'secondAttempt',
+        kicker:'Segunda tentativa', title:'Mais uma, ainda melhor',
+        helpText:'Escreva mais uma pergunta ou reação, pode ser nova ou melhorada.',
+        placeholder:'Escreva sua frase aqui...',
+      },
+    ],
+  },
+
+  /* ---------------- Activity 5 — Fix It ---------------- */
+  {
+    id:'a5', week:2, title:'Fix It',
+    subtitle:'Corrija frases e escreva exemplos pessoais.',
+    desc:'Corrija frases e escreva exemplos pessoais.',
+    icon:'✍️',
+    stages:[
+      {
+        key:'recognition', type:'recognition',
+        kicker:'Reconhecimento', title:'Encontre a frase certa',
+        helpText:'Toque na versão correta de cada frase.',
+        items:[
+          {key:'s1', label:'Qual frase está correta?', emoji:'✏️', options:['I like it.','I likes it.','I liking it.']},
+          {key:'s2', label:'Qual frase está correta?', emoji:'✏️', options:["She don't like it.","She doesn't like it.","She not like it."]},
+          {key:'s3', label:'Qual frase está correta?', emoji:'✏️', options:['My favorite color blue is.','Blue is my favorite color.','Favorite my color is blue.']},
+        ],
+      },
+      {
+        key:'guidedPractice', type:'fillBlank',
+        kicker:'Prática guiada', title:'Complete com a palavra correta',
+        helpText:'Complete cada frase com a palavra correta.',
+        items:[
+          {key:'g1', emoji:'✏️', pre:'She', post:'like coffee.', hint:"Dica: complete com doesn't ou don't."},
+          {key:'g2', emoji:'✏️', pre:'I', post:'soccer on Sundays.', hint:'Dica: complete com play (o sujeito é I, não usa -s).'},
+          {key:'g3', emoji:'✏️', pre:'My favorite animal', post:'a dog.', hint:'Dica: complete com is.'},
+        ],
+      },
+      {
+        key:'independent', type:'independent',
+        kicker:'Produção independente', title:'Agora escreva certo',
+        helpText:'Agora escreva as suas próprias frases corretas, sem opções.',
+        fields:[
+          {key:'s1', label:'Escreva uma frase correta sobre algo que você gosta:', placeholder:'I like ...'},
+          {key:'s2', label:'Escreva uma frase correta sobre algo que você não gosta:', placeholder:"I don't like ..."},
+        ],
+      },
+      {key:'reflection', type:'reflection', kicker:'Reflexão', title:'Como foi para você?'},
+      {
+        key:'feedback', type:'feedback',
+        kicker:'Feedback', title:'Veja o que eu percebi',
+        independentKey:'independent', reflectionKey:'reflection',
+        introText:`Muito bem, ${STUDENT_NAME}! Depois de corrigir frases, você escreveu as suas próprias frases já certinhas, sem precisar de opções.`,
+        outroText:'Perceber o erro e depois escrever corretamente é um passo enorme. Isso mostra que a regra já faz sentido para você.',
+      },
+      {
+        key:'secondAttempt', type:'secondAttempt',
+        kicker:'Segunda tentativa', title:'Mais uma, ainda melhor',
+        helpText:'Escreva mais uma frase correta sobre você, pode ser nova ou melhorada.',
+        placeholder:'Escreva sua frase aqui...',
+      },
+    ],
+  },
+
+  /* ---------------- Activity 6 — My Favorites Challenge ---------------- */
+  {
+    id:'a6', week:2, title:'My Favorites Challenge',
+    subtitle:'Complete a checagem final de progresso.',
+    desc:'Complete a checagem final de progresso.',
+    icon:'🌟',
+    stages:[
+      {
+        key:'recognition', type:'recognition',
+        kicker:'Reconhecimento', title:'Revisão rápida',
+        helpText:'Revise o que você aprendeu nessas duas semanas. Toque na opção que representa você.',
+        items:[
+          {key:'music', label:'Music', emoji:'🎵', options:EXPRESSIONS},
+          {key:'food', label:'Food', emoji:'🍕', options:['pizza','sushi','pasta','chocolate','salad']},
+          {key:'weekend', label:'Weekends', emoji:'📅', options:EXPRESSIONS},
+        ],
+      },
+      {
+        key:'independent', type:'independent',
+        kicker:'Produção independente', title:'Mostre o que você aprendeu',
+        helpText:'Mostre tudo o que você aprendeu nessas duas semanas, com suas próprias palavras.',
+        fields:[
+          {key:'summary1', label:'Escreva uma frase sobre algo que você ama:', placeholder:'I love ...'},
+          {key:'summary2', label:'Escreva uma frase sobre algo que você não gosta:', placeholder:"I don't like ..."},
+        ],
+      },
+      {
+        key:'reading', type:'recognition',
+        kicker:'Leitura', title:'Leitura final',
+        helpText:'Leia o texto sobre o Lucas e responda às perguntas.',
+        passage:{
+          title:'A note from a friend',
+          text:"Hi! I'm Lucas. My favorite hobby is soccer. I love pizza, but I don't like vegetables. My favorite season is summer.",
+        },
+        items:[
+          {key:'hobby', label:"Lucas's favorite hobby", emoji:'⚽', options:['Soccer','Reading','Dancing']},
+          {key:'veg', label:'Lucas and vegetables', emoji:'🥦', options:['He loves them.',"He doesn't like them.",'They are OK.']},
+        ],
+        bumps:['reading'],
+      },
+      {
+        key:'miniConversation', type:'fillBlank',
+        kicker:'Mini conversa', title:'Complete a conversa final',
+        helpText:'Complete a mini conversa final com suas próprias respostas.',
+        items:[
+          {key:'c1', emoji:'💬', pre:'A: What is your favorite food? B: My favorite food', post:'pizza.', hint:'Dica: complete com is.'},
+          {key:'c2', emoji:'💬', pre:'A: Do you like soccer? B:', post:'', hint:"Tente: Yes, I do. / No, I don't. / It's OK."},
+        ],
+        bumps:['communication','sentenceBuilding'],
+      },
+      {key:'reflection', type:'reflection', kicker:'Reflexão', title:'Como foi para você?'},
+      {
+        key:'celebrate', type:'celebrate',
+        kicker:'Celebração', title:'Você conseguiu!',
+      },
+    ],
+  },
+];
+
+/* =======================================================
+   State
+======================================================= */
+function buildActivitiesState(){
+  const obj = {};
+  ACTIVITIES_META.forEach(a=>{
+    const answers = {};
+    a.stages.forEach(s=>{
+      if(s.type === 'secondAttempt') answers[s.key] = '';
+      else if(s.type === 'reflection') answers[s.key] = {easy:'', hard:'', note:''};
+      else answers[s.key] = {};
+    });
+    obj[a.id] = {status:'not_started', stage:0, answers};
+  });
+  return obj;
+}
+
+function defaultState(){
+  return {
+    onboarded:false,
+    ui:{ view:'welcome', tab:'home' },
+    activities: buildActivitiesState(),
+    indicators:{vocabulary:0, sentenceBuilding:0, reading:0, communication:0},
+    achievements:[],
+    achievementsSeen:[],
+  };
+}
+
+let state = loadState();
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    return Object.assign(defaultState(), parsed, {
+      activities: Object.assign(defaultState().activities, parsed.activities || {}),
+      indicators: Object.assign(defaultState().indicators, parsed.indicators || {}),
+      ui: Object.assign({view:'welcome', tab:'home'}, parsed.ui || {}),
+    });
+  }catch(e){ return defaultState(); }
+}
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+
+function bumpIndicator(key){
+  state.indicators[key] = Math.min(3, (state.indicators[key]||0) + 1);
+}
+function unlock(id){
+  if(!state.achievements.includes(id)) state.achievements.push(id);
+}
+function checkGlobalAchievements(){
+  const doneCount = ACTIVITIES_META.filter(a => state.activities[a.id].status === 'completed').length;
+  if(doneCount >= 6) unlock('journey_complete');
+}
+function activitiesCompletedCount(){
+  return ACTIVITIES_META.filter(a => state.activities[a.id].status === 'completed').length;
+}
+
+/* =======================================================
+   Toast
+======================================================= */
+let toastQueue = [];
+function queueToast(text, emoji){
+  toastQueue.push({text, emoji});
+}
+function flushToasts(){
+  const el = document.getElementById('toast');
+  if(!el || toastQueue.length === 0) return;
+  const next = toastQueue.shift();
+  el.querySelector('.em').textContent = next.emoji || '🌿';
+  el.querySelector('.txt').textContent = next.text;
+  requestAnimationFrame(()=>{
+    el.classList.add('show');
+    setTimeout(()=>{
+      el.classList.remove('show');
+      setTimeout(()=> flushToasts(), 350);
+    }, 2200);
+  });
+}
+function unseenAchievementToasts(){
+  state.achievements.forEach(id=>{
+    if(!state.achievementsSeen.includes(id)){
+      const meta = ACHIEVEMENTS_META.find(a=>a.id===id);
+      if(meta) queueToast('Conquista desbloqueada: ' + meta.title, meta.icon);
+      state.achievementsSeen.push(id);
+    }
+  });
+}
+
+/* =======================================================
+   Render root
+======================================================= */
+function render(){
+  saveState();
+  const root = document.getElementById('app');
+  if(state.ui.view === 'welcome') renderWelcome(root);
+  else if(state.ui.view === 'teacher') renderTeacher(root);
+  else if(state.ui.view === 'main') renderMain(root);
+  else if(state.ui.view === 'activity') renderActivity(root);
+}
+
+function goTo(view, tab){
+  state.ui.view = view;
+  if(tab) state.ui.tab = tab;
+  render();
+  const scroller = document.querySelector('.scroll, #activityScreen');
+  if(scroller) scroller.scrollTop = 0;
+}
+
+/* =======================================================
+   Welcome
+======================================================= */
+function renderWelcome(root){
+  root.innerHTML = `
+    <div class="screen welcome">
+      <div class="mark">ELOQUA ENGLISH SCHOOL</div>
+      <h1>ELO PATH</h1>
+      <p class="sub">Uma jornada curta de inglês, feita especialmente para você, para continuar evoluindo mesmo enquanto estivermos longe.</p>
+      <div class="student">para ${STUDENT_NAME} \u2764\uFE0F</div>
+      <button class="cta" id="beginBtn">Começar minha jornada</button>
+    </div>
+  `;
+  document.getElementById('beginBtn').addEventListener('click', ()=>{
+    goTo('teacher');
+  });
+}
+
+/* =======================================================
+   Teacher message
+======================================================= */
+function renderTeacher(root){
+  const msg = `Oi, ${STUDENT_NAME}! \u{1F49C}
+
+Como ficaremos duas semanas sem aula, preparei essa jornada de inglês bem curtinha especialmente para você.
+
+São seis atividades práticas. Você pode fazer três por semana, no seu tempo e do jeito que a sua rotina permitir.
+
+Vá com calma, tente sozinha antes de pedir ajuda e perceba o quanto você já consegue fazer sem mim.
+
+Estou muito animada para ver o seu progresso quando nos encontrarmos de novo!`;
+
+  root.innerHTML = `
+    <div class="screen teacher-wrap">
+      <div class="note-card">
+        <div class="note-eyebrow">Uma mensagem da sua professora</div>
+        <h2>Antes de começar</h2>
+        <div class="note-body">${msg}</div>
+        <div class="note-sign">Com carinho, Professora Rayane 🌿</div>
+      </div>
+      <button class="cta" id="toDash">Ir para o início</button>
+    </div>
+  `;
+  document.getElementById('toDash').addEventListener('click', ()=>{
+    state.onboarded = true;
+    goTo('main','home');
+  });
+}
+
+/* =======================================================
+   Main app shell (tabs + bottom nav)
+======================================================= */
+function renderMain(root){
+  const tab = state.ui.tab;
+  let body = '';
+  if(tab==='home') body = homeHTML();
+  else if(tab==='journey') body = journeyHTML();
+  else if(tab==='progress') body = progressHTML();
+  else if(tab==='achievements') body = achievementsHTML();
+
+  root.innerHTML = `
+    <div class="screen" style="position:relative;">
+      <div class="toast" id="toast"><span class="em">🌿</span><span class="txt"></span></div>
+      <div class="scroll fade-in">${body}</div>
+      <div class="bottom-nav">
+        ${navBtn('home','🏡','Início')}
+        ${navBtn('journey','🗺️','Minha jornada')}
+        ${navBtn('progress','📈','Meu progresso')}
+        ${navBtn('achievements','🌟','Conquistas')}
+      </div>
+    </div>
+  `;
+  bindMainEvents();
+  flushToasts();
+}
+function navBtn(key, icon, label){
+  const active = state.ui.tab === key ? ' active' : '';
+  return `<button class="nav-btn${active}" data-tab="${key}"><span class="ic">${icon}</span>${label}</button>`;
+}
+
+function findInProgress(){
+  return ACTIVITIES_META.find(a => state.activities[a.id].status === 'in_progress');
+}
+
+function homeHTML(){
+  const inProgress = findInProgress();
+  const done = activitiesCompletedCount();
+  const pct = Math.round((done/6)*100);
+
+  let continueCard = '';
+  if(inProgress){
+    continueCard = `
+      <button class="continue-card" id="continueCard" data-id="${inProgress.id}" style="width:100%;border:none;">
+        <div class="icon-badge">${inProgress.icon}</div>
+        <div class="txt">
+          <div class="eyebrow">Continue de onde parou</div>
+          <div class="title">${inProgress.title}</div>
+        </div>
+        <div class="arrow">→</div>
+      </button>
+    `;
+  }
+
+  return `
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <div>
+        <div class="greeting-eyebrow">Unidade 4 · Things I Like</div>
+        <h1>Bem-vinda de volta, ${STUDENT_NAME}</h1>
+      </div>
+      <div class="avatar">R</div>
+    </div>
+
+    ${continueCard ? `<div style="margin-top:18px;">${continueCard}</div>` : ''}
+
+    <div class="card" style="margin-top:18px;">
+      <div class="stat-row">
+        <div class="ring" style="--pct:${pct};"><div class="ring-inner">${done}/6</div></div>
+        <div class="stat-label"><b>Atividades concluídas:</b><br>${done} de 6</div>
+      </div>
+      <div class="ind-grid">
+        ${INDICATORS.map(ind => `
+          <div class="ind-card">
+            <div class="ind-label">${ind.label}</div>
+            <div class="ind-dots">${dotsHTML(state.indicators[ind.key])}</div>
+            <div class="ind-level">${LEVELS[state.indicators[ind.key]]}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="section-title">Sua jornada</div>
+    ${ACTIVITIES_META.slice(0,3).map(a => actCardHTML(a)).join('')}
+    <p class="empty-note">Veja as seis atividades em <b>Minha jornada</b> logo abaixo.</p>
+  `;
+}
+
+function dotsHTML(level){
+  let out = '';
+  for(let i=0;i<3;i++) out += `<div class="ind-dot ${i<level?'filled':''}"></div>`;
+  return out;
+}
+
+function actCardHTML(a){
+  const st = state.activities[a.id].status;
+  const label = st==='completed' ? 'Concluída' : st==='in_progress' ? 'Em andamento' : 'Não iniciada';
+  return `
+    <button class="act-card" data-open-activity="${a.id}" style="width:100%;text-align:left;border:none;">
+      <div class="act-icon ${st==='completed'?'done':''}">${st==='completed' ? '✓' : a.icon}</div>
+      <div class="act-body">
+        <div class="act-title">${a.title}</div>
+        <div class="act-sub">${a.subtitle}</div>
+      </div>
+      <div class="badge ${st}">${label}</div>
+    </button>
+  `;
+}
+
+function journeyHTML(){
+  const w1 = ACTIVITIES_META.filter(a=>a.week===1);
+  const w2 = ACTIVITIES_META.filter(a=>a.week===2);
+  return `
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <div>
+        <div class="greeting-eyebrow">Duas semanas, no seu ritmo</div>
+        <h1>Minha jornada</h1>
+      </div>
+    </div>
+    <div class="section-title">Semana 1</div>
+    ${w1.map(a=>actCardHTML(a)).join('')}
+    <div class="section-title">Semana 2</div>
+    <div class="week-note"><span>💡</span><span>Dica: muitas alunas acham mais fácil completar a Semana 1 primeiro, mas você pode explorar na ordem que preferir.</span></div>
+    ${w2.map(a=>actCardHTML(a)).join('')}
+  `;
+}
+
+function progressHTML(){
+  const done = activitiesCompletedCount();
+  return `
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <div>
+        <div class="greeting-eyebrow">Evoluindo, passo a passo</div>
+        <h1>Meu progresso</h1>
+      </div>
+    </div>
+    <div class="card">
+      <div class="stat-row">
+        <div class="ring" style="--pct:${Math.round((done/6)*100)};"><div class="ring-inner">${done}/6</div></div>
+        <div class="stat-label"><b>Atividades concluídas:</b><br>${done} de 6</div>
+      </div>
+    </div>
+    <div class="section-title">Indicadores de aprendizagem</div>
+    <div class="card">
+      ${INDICATORS.map(ind => `
+        <div class="lvl-row">
+          <div>
+            <div class="lvl-name">${ind.label}</div>
+            <div class="lvl-desc">${ind.desc}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:12px;">
+            <div class="ind-dots" style="justify-content:flex-end;">${dotsHTML(state.indicators[ind.key])}</div>
+            <div class="ind-level">${LEVELS[state.indicators[ind.key]]}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <p class="empty-note">Esses níveis evoluem conforme você completa as atividades. Eles descrevem o seu progresso, não uma nota de prova.</p>
+  `;
+}
+
+function achievementsHTML(){
+  return `
+    <div class="topbar" style="padding-left:0;padding-right:0;">
+      <div>
+        <div class="greeting-eyebrow">Evidências reais, celebradas com carinho</div>
+        <h1>Conquistas</h1>
+      </div>
+    </div>
+    ${ACHIEVEMENTS_META.map(a=>{
+      const has = state.achievements.includes(a.id);
+      return `
+        <div class="ach-card ${has?'':'locked'}">
+          <div class="ach-icon">${has ? a.icon : '🔒'}</div>
+          <div>
+            <div class="ach-title">${a.title}</div>
+            <div class="ach-desc">${a.desc}</div>
+          </div>
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+
+function bindMainEvents(){
+  document.querySelectorAll('[data-tab]').forEach(btn=>{
+    btn.addEventListener('click', ()=> goTo('main', btn.dataset.tab));
+  });
+  document.querySelectorAll('[data-open-activity]').forEach(btn=>{
+    btn.addEventListener('click', ()=> openActivity(btn.dataset.openActivity));
+  });
+  const cc = document.getElementById('continueCard');
+  if(cc) cc.addEventListener('click', ()=> openActivity(cc.dataset.id));
+}
+
+function openActivity(id){
+  const act = state.activities[id];
+  if(act.status === 'not_started'){
+    act.status = 'in_progress';
+    act.stage = 0;
+  }
+  state.ui.view = 'activity';
+  state.ui.activity = id;
+  render();
+}
+
+/* =======================================================
+   Activity screen — generic engine, drives all six activities
+======================================================= */
+function renderActivity(root){
+  const id = state.ui.activity;
+  const act = state.activities[id];
+  const cfg = ACTIVITIES_META.find(a=>a.id===id);
+  const stageCfg = cfg.stages[act.stage];
+
+  root.innerHTML = `
+    <div class="screen" id="activityScreen" style="position:relative; overflow-y:auto; -webkit-overflow-scrolling:touch; min-height:0;">
+      <div class="toast" id="toast"><span class="em">🌿</span><span class="txt"></span></div>
+      <div class="act-header">
+        <button class="icon-btn" id="backJourney">←</button>
+        <div class="act-header-title">
+          <div class="eyebrow">${cfg.title}</div>
+          <div class="title">${stageCfg.kicker}</div>
+        </div>
+        <div style="width:38px;flex-shrink:0;"></div>
+      </div>
+      <div class="stage-dots">
+        ${cfg.stages.map((s,i)=>`<div class="stage-dot ${i<act.stage?'done':''} ${i===act.stage?'on':''}"></div>`).join('')}
+      </div>
+      <div class="stage-body fade-in" id="stageBody"></div>
+    </div>
+  `;
+
+  document.getElementById('backJourney').addEventListener('click', ()=> goTo('main','journey'));
+
+  renderStage(cfg, stageCfg, act);
+}
+
+function stageBodyEl(){ return document.getElementById('stageBody'); }
+
+function stageButtonLabel(cfg, stageCfg){
+  const idx = cfg.stages.findIndex(s=>s.key===stageCfg.key);
+  const isLast = idx === cfg.stages.length - 1;
+  if(isLast) return 'FINALIZAR ATIVIDADE';
+  if(stageCfg.type === 'feedback') return 'CONTINUAR';
+  return 'CONCLUÍDO';
+}
+
+function stageActionHTML(cfg, stageCfg, act){
+  const label = stageButtonLabel(cfg, stageCfg);
+  const enabled = stageIsValid(cfg, stageCfg, act);
+  return `<button class="btn btn-done" id="stageActionBtn" style="width:100%;margin-top:26px;margin-bottom:6px;" ${enabled?'':'disabled'}>${label}</button>`;
+}
+
+function bindStageAction(cfg, stageCfg, act){
+  const btn = document.getElementById('stageActionBtn');
+  if(!btn) return;
+  btn.addEventListener('click', ()=> handleNext(cfg, stageCfg, act));
+  updateNextEnabled(cfg, stageCfg, act);
+}
+
+function renderStage(cfg, stageCfg, act){
+  const el = stageBodyEl();
+  if(stageCfg.type === 'recognition') return renderRecognitionGeneric(el, stageCfg, act, cfg);
+  if(stageCfg.type === 'fillBlank') return renderFillBlankGeneric(el, stageCfg, act, cfg);
+  if(stageCfg.type === 'independent') return renderIndependentGeneric(el, stageCfg, act, cfg);
+  if(stageCfg.type === 'reflection') return renderReflectionGeneric(el, stageCfg, act, cfg);
+  if(stageCfg.type === 'feedback') return renderFeedbackGeneric(el, stageCfg, act, cfg);
+  if(stageCfg.type === 'secondAttempt') return renderSecondAttemptGeneric(el, stageCfg, act, cfg);
+  if(stageCfg.type === 'celebrate') return renderCelebrateGeneric(el, stageCfg, act, cfg);
+}
+
+/* ---- Type: recognition (also used for reading passages with comprehension) ---- */
+function renderRecognitionGeneric(el, stageCfg, act, cfg){
+  const ans = act.answers[stageCfg.key];
+  el.innerHTML = `
+    <div class="stage-kicker">${stageCfg.kicker}</div>
+    <h2 class="stage-h">${stageCfg.title}</h2>
+    <p class="stage-help">${stageCfg.helpText}</p>
+    ${stageCfg.passage ? `
+      <div class="item-card">
+        <div class="item-label" style="margin-bottom:8px;">${stageCfg.passage.title}</div>
+        <p style="font-size:14.5px;line-height:1.7;color:var(--ink);">${stageCfg.passage.text}</p>
+      </div>
+    ` : ''}
+    ${stageCfg.items.map(item => `
+      <div class="item-card">
+        <div class="item-head">
+          <div class="item-emoji">${item.emoji}</div>
+          <div class="item-label">${item.label}</div>
+        </div>
+        <div class="chip-row" data-item="${item.key}">
+          ${item.options.map(opt => `
+            <button class="chip ${ans[item.key]===opt?'selected':''}" data-exp="${opt}">${opt}</button>
+          `).join('')}
+        </div>
+      </div>
+    `).join('')}
+    ${stageActionHTML(cfg, stageCfg, act)}
+  `;
+  el.querySelectorAll('.chip-row').forEach(row=>{
+    row.querySelectorAll('.chip').forEach(chip=>{
+      chip.addEventListener('click', ()=>{
+        ans[row.dataset.item] = chip.dataset.exp;
+        row.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+        chip.classList.add('selected');
+        saveState();
+        updateNextEnabled(cfg, stageCfg, act);
+      });
+    });
+  });
+  bindStageAction(cfg, stageCfg, act);
+}
+
+/* ---- Type: fillBlank (guided practice / mini conversation) ---- */
+function renderFillBlankGeneric(el, stageCfg, act, cfg){
+  const ans = act.answers[stageCfg.key];
+  el.innerHTML = `
+    <div class="stage-kicker">${stageCfg.kicker}</div>
+    <h2 class="stage-h">${stageCfg.title}</h2>
+    <p class="stage-help">${stageCfg.helpText}</p>
+    ${stageCfg.items.map(g => `
+      <div class="fill-sentence">
+        <div class="fill-line">
+          <span class="item-emoji">${g.emoji}</span><b>${g.pre}</b>
+          <input class="blank-input" type="text" placeholder="..." data-guided="${g.key}" value="${ans[g.key]||''}">
+          ${g.post||''}
+        </div>
+        ${g.hint ? `
+          <button class="hint-toggle" data-hint="${g.key}">Precisa de uma dica?</button>
+          <div class="hint-box" style="display:none;" id="hint-${g.key}">${g.hint}</div>
+        ` : ''}
+      </div>
+    `).join('')}
+    ${stageActionHTML(cfg, stageCfg, act)}
+  `;
+  el.querySelectorAll('[data-guided]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      ans[inp.dataset.guided] = inp.value;
+      saveState();
+      updateNextEnabled(cfg, stageCfg, act);
+    });
+  });
+  el.querySelectorAll('[data-hint]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const box = document.getElementById('hint-'+btn.dataset.hint);
+      box.style.display = box.style.display==='none' ? 'block' : 'none';
+    });
+  });
+  bindStageAction(cfg, stageCfg, act);
+}
+
+/* ---- Type: independent ---- */
+function renderIndependentGeneric(el, stageCfg, act, cfg){
+  const ans = act.answers[stageCfg.key];
+  el.innerHTML = `
+    <div class="stage-kicker">${stageCfg.kicker}</div>
+    <h2 class="stage-h">${stageCfg.title}</h2>
+    <p class="stage-help">${stageCfg.helpText}</p>
+    ${stageCfg.fields.map(f => `
+      <label class="field-label">${f.label}</label>
+      <input class="free-input" type="text" data-field="${f.key}" placeholder="${f.placeholder}" value="${ans[f.key]||''}">
+    `).join('')}
+    ${stageActionHTML(cfg, stageCfg, act)}
+  `;
+  el.querySelectorAll('[data-field]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      ans[inp.dataset.field] = inp.value;
+      saveState();
+      updateNextEnabled(cfg, stageCfg, act);
+    });
+  });
+  bindStageAction(cfg, stageCfg, act);
+}
+
+/* ---- Type: reflection ---- */
+function renderReflectionGeneric(el, stageCfg, act, cfg){
+  const r = act.answers[stageCfg.key];
+  el.innerHTML = `
+    <div class="stage-kicker">${stageCfg.kicker}</div>
+    <h2 class="stage-h">${stageCfg.title}</h2>
+    <div class="choice-block">
+      <div class="q">O que foi mais fácil?</div>
+      <div class="chip-row" data-refl="easy">
+        ${REFLECTION_OPTIONS.map(o=>`<button class="chip ${r.easy===o?'selected':''}" data-val="${o}">${o}</button>`).join('')}
+      </div>
+    </div>
+    <div class="choice-block">
+      <div class="q">O que foi mais desafiador?</div>
+      <div class="chip-row" data-refl="hard">
+        ${REFLECTION_OPTIONS.map(o=>`<button class="chip ${r.hard===o?'selected':''}" data-val="${o}">${o}</button>`).join('')}
+      </div>
+    </div>
+    <label class="field-label">Gostaria de contar alguma coisa para a sua professora? (opcional)</label>
+    <textarea class="free-input" rows="3" id="reflNote" placeholder="Escreva aqui...">${r.note||''}</textarea>
+    ${stageActionHTML(cfg, stageCfg, act)}
+  `;
+  el.querySelectorAll('.chip-row').forEach(row=>{
+    const key = row.dataset.refl;
+    row.querySelectorAll('.chip').forEach(chip=>{
+      chip.addEventListener('click', ()=>{
+        r[key] = chip.dataset.val;
+        row.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+        chip.classList.add('selected');
+        saveState();
+        updateNextEnabled(cfg, stageCfg, act);
+      });
+    });
+  });
+  document.getElementById('reflNote').addEventListener('input', (e)=>{ r.note = e.target.value; saveState(); });
+  bindStageAction(cfg, stageCfg, act);
+}
+
+/* ---- Type: feedback ---- */
+function renderFeedbackGeneric(el, stageCfg, act, cfg){
+  const indepCfg = cfg.stages.find(s=>s.key===stageCfg.independentKey);
+  const indepAns = act.answers[stageCfg.independentKey] || {};
+  const r = act.answers[stageCfg.reflectionKey] || {};
+  const quotes = indepCfg ? indepCfg.fields.map(f=>(indepAns[f.key]||'').trim()).filter(Boolean) : [];
+  const intro = stageCfg.introText || `Olha só o que você fez, ${STUDENT_NAME}! Você escreveu frases reais e independentes sobre coisas que são verdadeiras para você.`;
+  const outro = stageCfg.outroText || `Esse é exatamente o tipo de inglês que importa: não é uma folha de exercícios perfeita, é uma ideia verdadeira que você poderia realmente dizer para alguém.`;
+  el.innerHTML = `
+    <div class="stage-kicker">${stageCfg.kicker}</div>
+    <h2 class="stage-h">${stageCfg.title}</h2>
+    <div class="feedback-card">
+      <p>${intro}</p>
+      ${quotes.map(q=>`<div class="quote">"${q}"</div>`).join('')}
+      <p>${outro}</p>
+      ${r.easy ? `<p>Você me disse que <b>${r.easy.toLowerCase()}</b> foi mais fácil, essa é uma habilidade que você já está construindo.</p>` : ''}
+      ${r.hard ? `<p><b>${r.hard}</b> foi mais desafiador, e isso é completamente normal nessa fase. É exatamente nisso que vamos focar na nossa próxima aula juntas.</p>` : ''}
+    </div>
+    ${stageActionHTML(cfg, stageCfg, act)}
+  `;
+  bindStageAction(cfg, stageCfg, act);
+}
+
+/* ---- Type: secondAttempt ---- */
+function renderSecondAttemptGeneric(el, stageCfg, act, cfg){
+  el.innerHTML = `
+    <div class="stage-kicker">${stageCfg.kicker}</div>
+    <h2 class="stage-h">${stageCfg.title}</h2>
+    <p class="stage-help">${stageCfg.helpText}</p>
+    <textarea class="free-input" rows="3" id="secondInput" placeholder="${stageCfg.placeholder}">${act.answers[stageCfg.key]||''}</textarea>
+    ${stageActionHTML(cfg, stageCfg, act)}
+  `;
+  document.getElementById('secondInput').addEventListener('input', (e)=>{
+    act.answers[stageCfg.key] = e.target.value;
+    saveState();
+    updateNextEnabled(cfg, stageCfg, act);
+  });
+  bindStageAction(cfg, stageCfg, act);
+}
+
+/* ---- Type: celebrate (Activity 6 closing stage) ---- */
+function renderCelebrateGeneric(el, stageCfg, act, cfg){
+  const done = activitiesCompletedCount();
+  const projected = done + (act.status === 'completed' ? 0 : 1);
+  el.innerHTML = `
+    <div class="stage-kicker">${stageCfg.kicker}</div>
+    <h2 class="stage-h">${stageCfg.title}</h2>
+    <div class="feedback-card">
+      <p>Parabéns, ${STUDENT_NAME}! Você chegou ao final da sua jornada de duas semanas.</p>
+      <p>Você completou ${projected} de 6 atividades e evoluiu em vocabulário, construção de frases, leitura e comunicação.</p>
+      <p>Estou muito orgulhosa do seu esforço e não vejo a hora de te ver na próxima aula!</p>
+    </div>
+    ${stageActionHTML(cfg, stageCfg, act)}
+  `;
+  bindStageAction(cfg, stageCfg, act);
+}
+
+/* =======================================================
+   Stage validation + advance
+======================================================= */
+function stageIsValid(cfg, stageCfg, act){
+  const ans = act.answers[stageCfg.key];
+  if(stageCfg.type === 'recognition'){
+    return stageCfg.items.every(i => !!ans[i.key]);
+  }
+  if(stageCfg.type === 'fillBlank'){
+    return stageCfg.items.every(i => (ans[i.key]||'').trim().length > 1);
+  }
+  if(stageCfg.type === 'independent'){
+    return stageCfg.fields.every(f => (ans[f.key]||'').trim().length > 1);
+  }
+  if(stageCfg.type === 'reflection'){
+    return !!ans.easy && !!ans.hard;
+  }
+  if(stageCfg.type === 'feedback'){
+    return true;
+  }
+  if(stageCfg.type === 'secondAttempt'){
+    return (ans||'').trim().length > 1;
+  }
+  if(stageCfg.type === 'celebrate'){
+    return true;
+  }
+  return false;
+}
+
+function updateNextEnabled(cfg, stageCfg, act){
+  const btn = document.getElementById('stageActionBtn');
+  if(!btn) return;
+  const ok = stageIsValid(cfg, stageCfg, act);
+  btn.disabled = !ok;
+  btn.classList.toggle('disabled', !ok);
+}
+
+function handleNext(cfg, stageCfg, act){
+  if(!stageIsValid(cfg, stageCfg, act)) return;
+
+  const bumps = stageCfg.bumps || TYPE_DEFAULT_BUMPS[stageCfg.type] || [];
+  bumps.forEach(b => bumpIndicator(b));
+
+  const typeAchievements = TYPE_DEFAULT_ACHIEVEMENTS[stageCfg.type] || [];
+  typeAchievements.forEach(id => unlock(id));
+
+  const idx = cfg.stages.findIndex(s=>s.key===stageCfg.key);
+  const isLast = idx === cfg.stages.length - 1;
+
+  if(isLast){
+    act.status = 'completed';
+    if(cfg.id === 'a1') unlock('favorite_explorer');
+    if(cfg.id === 'a4') unlock('conversation_starter');
+    checkGlobalAchievements();
+    saveState();
+    queueToast('Atividade concluída! Seu progresso foi salvo.', '✅');
+    unseenAchievementToasts();
+    goTo('main','journey');
+    return;
+  }
+
+  act.stage += 1;
+  saveState();
+  renderActivity(document.getElementById('app'));
+  const screenEl = document.getElementById('activityScreen');
+  if(screenEl) screenEl.scrollTop = 0;
+}
+
+/* =======================================================
+   Boot
+======================================================= */
+(function boot(){
+  if(state.onboarded && state.ui.view === 'welcome'){
+    state.ui.view = 'main';
+    state.ui.tab = state.ui.tab || 'home';
+  }
+  render();
+})();
+
+</script>
+</body>
+</html>
